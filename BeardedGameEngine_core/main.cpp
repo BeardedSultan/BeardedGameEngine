@@ -1,6 +1,7 @@
 #include "x64\src\graphics\window.h"
 #include "x64\src\maths\maths.h"
 #include "x64\src\utils\fileutils.h"
+#include "x64\src\graphics\shader.h"
 
 int main()	
 {
@@ -9,10 +10,33 @@ int main()
 	using namespace maths;
 
 	Window window("BeardedGameEngine", 800, 600);
-	glClearColor(0.5f, 0.1f, 0.7f, 1.0f);
+	//glClearColor(0.5f, 0.1f, 0.7f, 1.0f);
+	
+	GLfloat vertices[] =
+	{
+		4, 3, 0,
+		12, 3, 0,
+		4, 6, 0,
+		4, 6, 0,
+		12, 6, 0,
+		4, 3, 0
+	};
 
-	std::string file = read_file("main.cpp");
-	std::cout << file << std::endl;
+	GLuint vbo;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(0);
+
+	mat4 ortho = mat4::orthograhic(0.0f, 16.0f, 0.0f, 9.0f, -1.0f, 1.0f);
+
+	Shader shader("x64/src/shaders/basic.vert", "x64/src/shaders/basic.frag");
+	shader.enable();
+	shader.setUniformMat4("pr_matrix", ortho);
+
+	shader.setUniform2f("light_pos", vec2(8.0f, 4.5f));
+	shader.setUniform4f("colour", vec4(1.0f, 0.0f, 0.0f, 0.1f));
 
 	/*
 	mat4 a = mat4::orthograhic(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f);
@@ -27,25 +51,10 @@ int main()
 	std::cout << column << std::endl;
 	*/
 
-	/*
-	GLuint vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-	*/
-
 	while (!window.closed()) {
 		window.clear();
 		
-		#if 0
-		glBegin(GL_QUADS);
-		glVertex2f(-0.5f, -0.5f);
-		glVertex2f(-0.5f,  0.5f);
-		glVertex2f( 0.5f,  0.5f);
-		glVertex2f( 0.5f, -0.5f);
-		glEnd();
-		#elseif 0
-		glDrawArrays(GL_ARRAY_BUFFER, 0, 6);
-		#endif
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		window.update();
 	}
