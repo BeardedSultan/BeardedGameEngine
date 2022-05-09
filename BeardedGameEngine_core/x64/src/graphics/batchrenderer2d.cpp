@@ -43,12 +43,7 @@ namespace beardedGameEngine { namespace graphics {
 			offset += 4;
 		}
 
-		//+		indices	0x000000c9c2ae12c0 {...} unsigned short[60000]
-
-
-
 		m_IBO = new IndexBuffer(indices, RENDERER_INDICES_SIZE);
-		
 		glBindVertexArray(0);
 	}
 

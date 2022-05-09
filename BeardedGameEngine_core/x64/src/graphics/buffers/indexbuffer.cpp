@@ -7,13 +7,10 @@ namespace beardedGameEngine { namespace graphics {
 	{
 		glGenBuffers(1, &m_BufferID);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_BufferID);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(GLfloat), data, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(GLushort), data, GL_STATIC_DRAW); //bug was here, GLfloat went out of bound being 4 bytes, as opposed to GLushort being 2 bytes
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
-
-	//+		data	0x000000c9c2ae12c0 {0}	unsigned short *
-
-
+	
 	IndexBuffer::~IndexBuffer()
 	{
 		glDeleteBuffers(1, &m_BufferID);
