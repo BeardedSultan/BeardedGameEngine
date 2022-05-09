@@ -9,7 +9,9 @@
 
 #include "x64\src\graphics\renderable2d.h"
 #include "x64\src\graphics\simple2drenderer.h"
+#include "x64\src\graphics\batchrenderer2d.h"
 #include "x64\src\graphics\static_sprite.h"
+#include "x64\src\graphics\sprite.h"
 
 int main()
 {
@@ -24,9 +26,9 @@ int main()
 	shader.enable();
 	shader.setUniformMat4("pr_matrix", ortho);
 
-	StaticSprite sprite(5, 5, 4, 4, maths::vec4(1, 0, 1, 1), shader);
-	StaticSprite sprite2(7, 1, 2, 3, maths::vec4(0, 1, 0, 1), shader);
-	Simple2DRenderer renderer;
+	Sprite sprite(5, 5, 4, 4, maths::vec4(1, 0, 1, 1));
+	Sprite sprite2(7, 1, 2, 3, maths::vec4(0, 1, 0, 1));
+	BatchRenderer2D renderer;
 
 	while (!window.closed()) {
 		window.clear();
@@ -35,8 +37,10 @@ int main()
 		window.getMousePosition(x, y);
 		shader.setUniform2f("light_pos", vec2((float)(x * 16.0f / 1280.0f), (float)(9.0f - y * 9.0f / 720.0f)));
 
+		renderer.begin();
 		renderer.submit(&sprite);
 		renderer.submit(&sprite2);
+		renderer.end();
 		renderer.flush();
 
 		window.update();

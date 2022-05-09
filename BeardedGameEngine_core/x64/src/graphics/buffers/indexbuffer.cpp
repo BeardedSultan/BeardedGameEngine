@@ -11,6 +11,9 @@ namespace beardedGameEngine { namespace graphics {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
+	//+		data	0x000000c9c2ae12c0 {0}	unsigned short *
+
+
 	IndexBuffer::~IndexBuffer()
 	{
 		glDeleteBuffers(1, &m_BufferID);
