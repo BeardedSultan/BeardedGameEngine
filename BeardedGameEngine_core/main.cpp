@@ -16,6 +16,7 @@
 
 #include "x64\src\graphics\layers\layer.h"
 #include "x64\src\graphics\layers\tilelayer.h"
+#include "x64\src\graphics\layers\group.h"
 
 #include <vector>
 #include <time.h>
@@ -30,12 +31,13 @@ int main()
 
 	srand(time(NULL));
 
-	mat4 ortho = mat4::orthographic(0.0f, 16.0f, 0.0f, 9.0f, -1.0f, 1.0f);
+	//mat4 ortho = mat4::orthographic(0.0f, 16.0f, 0.0f, 9.0f, -1.0f, 1.0f);
+	
 	Shader* shader = new Shader("x64/src/shaders/basic.vert", "x64/src/shaders/basic.frag");
-	Shader* shader2 = new Shader("x64/src/shaders/basic.vert", "x64/src/shaders/basic.frag");
 	Shader& s = *shader;
+
+	Shader* shader2 = new Shader("x64/src/shaders/basic.vert", "x64/src/shaders/basic.frag");
 	Shader& s2 = *shader2;
-	//shader.setUniformMat4("pr_matrix", ortho);
 
 	//std::vector<Renderable2D*> sprites; 
 	//for (float y = 0.1; y < 9.0f; y += 1) {
@@ -52,18 +54,24 @@ int main()
 		}
 	}
 
-	Sprite* button = new Sprite(-15.0f, 5.0f, 6, 3, maths::vec4(1, 1, 1, 1));
-	layer.add(button);
-	//layer.push(maths::mat4(button->getPosition()));
-	layer.add(new Sprite(0.5f, 0.5f, 5.0f, 2.0f, maths::vec4(1, 0, 1, 1)));
-	//layer.pop(maths::mat4(button->getPosition()));
-
-	TileLayer layer2(shader2);
-	layer2.add(new Sprite(-2, -2, 4.0f, 4.0f, maths::vec4(0, rand() % 1000 / 1000.0f, rand() % 1000 / 1000.0f, 1)));
-
 	Timer time;
 	float timer = 0.0f;
 	unsigned int frames = 0;
+	
+	mat4 transform = mat4::translation(vec3(-15.0f, 5.0f, 0.0f)) * mat4::rotation(50.0f, vec3(0, 0, 1));
+
+	Group* group = new Group(transform);
+	group->add(new Sprite(0, 0, 6, 3, maths::vec4(1, 1, 1, 1)));
+
+	Group* button = new Group(mat4::translation(vec3(0.5f, 0.5f, 0.0f)));
+	button->add(new Sprite(0, 0, 5.0f, 2.0f, maths::vec4(1, 0, 1, 1)));
+	button->add(new Sprite(0.5f, 0.5f, 3, 1, maths::vec4(0.2f, 0.3f, 0.8f, 1)));
+	group->add(button);
+
+	layer.add(group);
+
+	TileLayer layer2(shader2);
+	layer2.add(new Sprite(-2, -2, 4.0f, 4.0f, maths::vec4(0, rand() % 1000 / 1000.0f, rand() % 1000 / 1000.0f, 1)));
 
 	while (!window.closed()) {
 
@@ -79,11 +87,6 @@ int main()
 
 		layer.render();
 		layer2.render();
-
-		mat4 rotateA = mat4::rotation(time.elapsed() * 50.0f, vec3(0, 0, 1));
-		s.setUniformMat4("ml_matrix", rotateA);
-		mat4 rotateB = mat4::rotation(time.elapsed() * 50.0f, vec3(0, 0, 1));
-		s2.setUniformMat4("ml_matrix", rotateB);
 
 		/*renderer.begin();
 		for (int i = 0; i < sprites.size(); i++) {
