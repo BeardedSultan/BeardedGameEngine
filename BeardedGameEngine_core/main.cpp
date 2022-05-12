@@ -14,6 +14,9 @@
 #include "x64\src\graphics\sprite.h"
 #include "x64\src\utils\timer.h"
 
+#include "x64\src\graphics\layers\layer.h"
+#include "x64\src\graphics\layers\tilelayer.h"
+
 #include <vector>
 #include <time.h>
 
@@ -25,22 +28,31 @@ int main()
 
 	Window window("BeardedGameEngine", 1280, 720);
 
-	mat4 ortho = mat4::orthographic(0.0f, 16.0f, 0.0f, 9.0f, -1.0f, 1.0f);
-	Shader shader("x64/src/shaders/basic.vert", "x64/src/shaders/basic.frag");
-	shader.enable();
-	shader.setUniformMat4("pr_matrix", ortho);
-
-
-	std::vector<Renderable2D*> sprites; 
 	srand(time(NULL));
 
-	for (float y = 0; y < 9.0f; y += 1) {
-		for (float x = 0.1; x < 16.0f; x += 1) {
-			sprites.push_back(new Sprite(x, y, 0.8f, 0.8f, maths::vec4(rand() % 1000 / 1000.0f, 0, rand() % 1000 / 1000.0f, 1)));
+	mat4 ortho = mat4::orthographic(0.0f, 16.0f, 0.0f, 9.0f, -1.0f, 1.0f);
+	Shader* shader = new Shader("x64/src/shaders/basic.vert", "x64/src/shaders/basic.frag");
+	Shader* shader2 = new Shader("x64/src/shaders/basic.vert", "x64/src/shaders/basic.frag");
+	Shader& s = *shader;
+	Shader& s2 = *shader2;
+	//shader.setUniformMat4("pr_matrix", ortho);
+
+	//std::vector<Renderable2D*> sprites; 
+	//for (float y = 0.1; y < 9.0f; y += 1) {
+	//	for (float x = 0.1; x < 16.0f; x += 1) {
+	//		sprites.push_back(new Sprite(x, y, 0.8f, 0.8f, maths::vec4(rand() % 1000 / 1000.0f, 0, rand() % 1000 / 1000.0f, 1)));
+	//	}
+	//}
+	//BatchRenderer2D renderer;
+
+	TileLayer layer(shader);
+	for (float y = -8.9f; y < 9.0f; y += 1) {
+		for (float x = -15.9f; x < 16.0f; x += 1) {
+			layer.add(new Sprite(x, y, 0.8f, 0.8f, maths::vec4(rand() % 1000 / 1000.0f, 0, rand() % 1000 / 1000.0f, 1)));
 		}
 	}
-
-	BatchRenderer2D renderer;
+	TileLayer layer2(shader2);
+	layer2.add(new Sprite(-2, -2, 4.0f, 4.0f, maths::vec4(0, rand() % 1000 / 1000.0f, rand() % 1000 / 1000.0f, 1)));
 
 	Timer time;
 	float timer = 0.0f;
@@ -52,14 +64,26 @@ int main()
 
 		double x, y;
 		window.getMousePosition(x, y);
-		shader.setUniform2f("light_pos", vec2((float)(x * 16.0f / 1280.0f), (float)(9.0f - y * 9.0f / 720.0f)));
 
-		renderer.begin();
+		s.enable();
+		s.setUniform2f("light_pos", vec2((float)(x * 32.0f / 1280.0f - 16.0f), (float)(9.0f - y * 18.0f / 720.0f)));
+		s2.enable();
+		s2.setUniform2f("light_pos", vec2(0, 0));
+
+		layer.render();
+		layer2.render();
+
+		mat4 rotateA = mat4::rotation(time.elapsed() * 50.0f, vec3(0, 0, 1));
+		s.setUniformMat4("ml_matrix", rotateA);
+		mat4 rotateB = mat4::rotation(time.elapsed() * 50.0f, vec3(0, 0, 1));
+		s2.setUniformMat4("ml_matrix", rotateB);
+
+		/*renderer.begin();
 		for (int i = 0; i < sprites.size(); i++) {
 			renderer.submit(sprites[i]);
 		}
 		renderer.end();
-		renderer.flush();
+		renderer.flush();*/
 
 		window.update();
 
