@@ -12,7 +12,6 @@ namespace beardedGameEngine { namespace graphics {
 	Layer::~Layer()
 	{
 		delete m_Shader;
-		//
 		delete m_Renderer;
 		for (int i = 0; i < m_Renderables.size(); i++) {
 			delete m_Renderables[i];
@@ -25,11 +24,13 @@ namespace beardedGameEngine { namespace graphics {
 	void Layer::render()
 	{
 		m_Shader->enable();
+
 		m_Renderer->begin();
 		for (const Renderable2D* renderable : m_Renderables) {
 			m_Renderer->submit(renderable);
 		}
 		m_Renderer->end();
+
 		m_Renderer->flush();
 	}
 

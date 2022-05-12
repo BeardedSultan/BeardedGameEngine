@@ -51,6 +51,13 @@ int main()
 			layer.add(new Sprite(x, y, 0.8f, 0.8f, maths::vec4(rand() % 1000 / 1000.0f, 0, rand() % 1000 / 1000.0f, 1)));
 		}
 	}
+
+	Sprite* button = new Sprite(-15.0f, 5.0f, 6, 3, maths::vec4(1, 1, 1, 1));
+	layer.add(button);
+	//layer.push(maths::mat4(button->getPosition()));
+	layer.add(new Sprite(0.5f, 0.5f, 5.0f, 2.0f, maths::vec4(1, 0, 1, 1)));
+	//layer.pop(maths::mat4(button->getPosition()));
+
 	TileLayer layer2(shader2);
 	layer2.add(new Sprite(-2, -2, 4.0f, 4.0f, maths::vec4(0, rand() % 1000 / 1000.0f, rand() % 1000 / 1000.0f, 1)));
 
@@ -68,7 +75,7 @@ int main()
 		s.enable();
 		s.setUniform2f("light_pos", vec2((float)(x * 32.0f / 1280.0f - 16.0f), (float)(9.0f - y * 18.0f / 720.0f)));
 		s2.enable();
-		s2.setUniform2f("light_pos", vec2(0, 0));
+		s2.setUniform2f("light_pos", vec2((float)(x * 32.0f / 1280.0f - 16.0f), (float)(9.0f - y * 18.0f / 720.0f)));
 
 		layer.render();
 		layer2.render();
