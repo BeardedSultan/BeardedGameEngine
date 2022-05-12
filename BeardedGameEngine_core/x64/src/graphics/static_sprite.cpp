@@ -17,10 +17,10 @@ namespace beardedGameEngine { namespace graphics {
 
 		GLfloat colors[] =
 		{
-			color.x, color.y, color.x, color.w,
-			color.x, color.y, color.x, color.w,
-			color.x, color.y, color.x, color.w,
-			color.x, color.y, color.x, color.w
+			color.x, color.y, color.z, color.w,
+			color.x, color.y, color.z, color.w,
+			color.x, color.y, color.z, color.w,
+			color.x, color.y, color.z, color.w
 		};
 
 		m_VertexArray->addBuffer(new Buffer(vertices, 4 * 3, 3), 0);

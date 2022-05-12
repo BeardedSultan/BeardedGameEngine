@@ -27,7 +27,8 @@ namespace beardedGameEngine { namespace maths {
 
 	mat4& mat4::multiply(const mat4& other) 
 	{
-		
+		float data[16];
+
 		for (int row = 0; row < 4; row++) 
 		{
 			for (int col = 0; col < 4; col++) 
@@ -37,9 +38,11 @@ namespace beardedGameEngine { namespace maths {
 				{
 					sum += elements[col + elem * 4] * other.elements[elem + row * 4];
 				}
-				elements[col + row * 4] = sum;
+				data[col + row * 4] = sum;
 			}
 		}
+
+		memcpy(elements, data, 4 * 4 * sizeof(float));
 
 		return *this;
 	}
@@ -54,7 +57,7 @@ namespace beardedGameEngine { namespace maths {
 		return multiply(other);
 	}
 
-	mat4 mat4::orthograhic(float left, float right, float bottom, float top, float near, float far)
+	mat4 mat4::orthographic(float left, float right, float bottom, float top, float near, float far)
 	{
 		mat4 ortho;
 		for (int i = 0; i < 4 * 4; i++) {
