@@ -13,6 +13,7 @@ namespace beardedGameEngine { namespace graphics {
 		glViewport(0, 0, width, height);
 	}
 
+	/* set window properties, initialize m_Keys[] and m_MouseButtons[] arrays */
 	Window::Window(const char *title, int width, int height) 
 	{
 		m_Title = title;
@@ -35,6 +36,7 @@ namespace beardedGameEngine { namespace graphics {
 		glfwTerminate();
 	}
 
+	/* initialize window, set callbacks for mouse buttons, keys and cursor */
 	bool Window::init()
 	{
 		if (!glfwInit()) {
@@ -82,6 +84,7 @@ namespace beardedGameEngine { namespace graphics {
 
 	/*INPUT_SECTION*/
 
+	/* callback adjusts value in corresponding array */
 	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		Window* win = (Window*) glfwGetWindowUserPointer(window);
