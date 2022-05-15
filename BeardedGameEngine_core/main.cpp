@@ -20,10 +20,8 @@
 
 #include <vector>
 #include <time.h>
+#include "x64\src\graphics\texture.h"
 
-#include <FreeImage.h>
-
-#if 0
 int main()
 {
 	using namespace beardedGameEngine;
@@ -33,22 +31,12 @@ int main()
 	Window window("BeardedGameEngine", 1280, 720);
 
 	srand(time(NULL));
-
-	//mat4 ortho = mat4::orthographic(0.0f, 16.0f, 0.0f, 9.0f, -1.0f, 1.0f);
 	
 	Shader* shader = new Shader("x64/src/shaders/basic.vert", "x64/src/shaders/basic.frag");
 	Shader& s = *shader;
 
 	Shader* shader2 = new Shader("x64/src/shaders/basic.vert", "x64/src/shaders/basic.frag");
 	Shader& s2 = *shader2;
-
-	//std::vector<Renderable2D*> sprites; 
-	//for (float y = 0.1; y < 9.0f; y += 1) {
-	//	for (float x = 0.1; x < 16.0f; x += 1) {
-	//		sprites.push_back(new Sprite(x, y, 0.8f, 0.8f, maths::vec4(rand() % 1000 / 1000.0f, 0, rand() % 1000 / 1000.0f, 1)));
-	//	}
-	//}
-	//BatchRenderer2D renderer;
 
 	TileLayer layer(shader);
 	for (float y = -8.9f; y < 9.0f; y += 1) {
@@ -73,6 +61,9 @@ int main()
 
 	layer.add(group);
 
+	Texture texture("test.png");
+	texture.bind();
+
 	TileLayer layer2(shader2);
 	layer2.add(new Sprite(-2, -2, 4.0f, 4.0f, maths::vec4(0, rand() % 1000 / 1000.0f, rand() % 1000 / 1000.0f, 1)));
 
@@ -91,13 +82,6 @@ int main()
 		layer.render();
 		layer2.render();
 
-		/*renderer.begin();
-		for (int i = 0; i < sprites.size(); i++) {
-			renderer.submit(sprites[i]);
-		}
-		renderer.end();
-		renderer.flush();*/
-
 		window.update();
 
 		frames++;
@@ -107,53 +91,6 @@ int main()
 			frames = 0;
 		}
 	}
-
-	return 0;
-}
-#endif
-
-int main()
-{
-	const char* filename = "test.png";
-
-	//image format
-	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
-	//pointer to the image, once loaded
-	FIBITMAP* dib(0);
-	//pointer to the image data
-	BYTE* bits(0);
-	//image width and height
-	unsigned int width(0), height(0);
-	//OpenGL's image ID to map to
-	GLuint gl_texID;
-
-	//check the file signature and deduce its format
-	fif = FreeImage_GetFileType(filename, 0);
-	//if still unknown, try to guess the file format from the file extension
-	if (fif == FIF_UNKNOWN)
-		fif = FreeImage_GetFIFFromFilename(filename);
-	//if still unkown, return failure
-	if (fif == FIF_UNKNOWN)
-		return false;
-
-	//check that the plugin has reading capabilities and load the file
-	if (FreeImage_FIFSupportsReading(fif))
-		std::cout << "bruh" << std::endl;
-		dib = FreeImage_Load(fif, filename);
-	//if the image failed to load, return failure
-	if (!dib)
-		return false;
-
-	//retrieve the image data
-	bits = FreeImage_GetBits(dib);
-	//get the image width and height
-	width = FreeImage_GetWidth(dib);
-	height = FreeImage_GetHeight(dib);
-	//if this somehow one of these failed (they shouldn't), return failure
-	if ((bits == 0) || (width == 0) || (height == 0))
-		return false;
-
-	std::cout << width << ", " << height << std::endl;
 
 	return 0;
 }

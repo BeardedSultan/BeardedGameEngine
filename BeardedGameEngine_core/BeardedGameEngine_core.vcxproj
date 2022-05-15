@@ -168,6 +168,7 @@
     <ClCompile Include="x64\src\graphics\shader.cpp" />
     <ClCompile Include="x64\src\graphics\sprite.cpp" />
     <ClCompile Include="x64\src\graphics\static_sprite.cpp" />
+    <ClCompile Include="x64\src\graphics\texture.cpp" />
     <ClCompile Include="x64\src\graphics\window.cpp" />
     <ClCompile Include="x64\src\maths\mat4.cpp" />
     <ClCompile Include="x64\src\maths\vec2.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="x64\src\graphics\simple2drenderer.h" />
     <ClInclude Include="x64\src\graphics\sprite.h" />
     <ClInclude Include="x64\src\graphics\static_sprite.h" />
+    <ClInclude Include="x64\src\graphics\texture.h" />
     <ClInclude Include="x64\src\graphics\window.h" />
     <ClInclude Include="x64\src\maths\mat4.h" />
     <ClInclude Include="x64\src\maths\maths.h" />
@@ -196,6 +198,7 @@
     <ClInclude Include="x64\src\maths\vec3.h" />
     <ClInclude Include="x64\src\maths\vec4.h" />
     <ClInclude Include="x64\src\utils\fileutils.h" />
+    <ClInclude Include="x64\src\utils\imageload.h" />
     <ClInclude Include="x64\src\utils\timer.h" />
   </ItemGroup>
   <ItemGroup>

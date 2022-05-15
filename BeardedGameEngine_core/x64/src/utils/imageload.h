@@ -5,7 +5,7 @@
 
 namespace beardedGameEngine {
 
-	static BYTE* load_image(const char* filename, unsigned int* width, unsigned int* height)
+	static BYTE* load_image(const char* filename, GLsizei* width, GLsizei* height)
 	{
 		//image format
 		FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
