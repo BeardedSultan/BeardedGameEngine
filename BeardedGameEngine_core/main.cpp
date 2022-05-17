@@ -2,6 +2,7 @@
 #include "x64\src\maths\maths.h"
 #include "x64\src\utils\fileutils.h"
 #include "x64\src\graphics\shader.h"
+#include "x64\src\utils\timer.h"
 
 #include "x64\src\graphics\buffers\buffer.h"
 #include "x64\src\graphics\buffers\indexbuffer.h"
@@ -12,7 +13,6 @@
 #include "x64\src\graphics\batchrenderer2d.h"
 #include "x64\src\graphics\static_sprite.h"
 #include "x64\src\graphics\sprite.h"
-#include "x64\src\utils\timer.h"
 
 #include "x64\src\graphics\layers\layer.h"
 #include "x64\src\graphics\layers\tilelayer.h"
@@ -36,9 +36,12 @@ int main()
 	Shader& s = *shader;
 
 	TileLayer layer(shader);
-	for (float y = -8.9f; y < 9.0f; y += 3) {
-		for (float x = -15.9f; x < 16.0f; x += 3) {
-			layer.add(new Sprite(x, y, 2.8f, 2.8f, maths::vec4(rand() % 1000 / 1000.0f, 0, rand() % 1000 / 1000.0f, 1)));
+	Texture* t = new Texture("alto.png");	
+	Texture* t2 = new Texture("bruh.png");
+	for (float y = -8.9f; y < 9.0f; y++) {
+		for (float x = -15.9f; x < 16.0f; x++) {
+			//layer.add(new Sprite(x, y, 0.9f, 0.9f, maths::vec4(rand() % 1000 / 1000.0f, 0, rand() % 1000 / 1000.0f, 1)));
+			layer.add(new Sprite(x, y, 0.9f, 0.9f, rand() % 2 == 0 ? t : t2));
 		}
 	}
 
@@ -46,9 +49,13 @@ int main()
 	float timer = 0.0f;
 	unsigned int frames = 0;
 
-	glActiveTexture(GL_TEXTURE0);
-	Texture texture("alto.png");
-	texture.bind();
+	GLint texIDs[] =
+	{
+		0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+	};
+	
+	s.enable();
+	s.setUniform1iv("textures", texIDs, 10);
 
 	while (!window.closed()) {
 
@@ -56,10 +63,7 @@ int main()
 
 		double x, y;
 		window.getMousePosition(x, y);
-
-		s.enable();
 		s.setUniform2f("light_pos", vec2((float)(x * 32.0f / 1280.0f - 16.0f), (float)(9.0f - y * 18.0f / 720.0f)));
-
 		layer.render();
 
 		window.update();
@@ -71,6 +75,9 @@ int main()
 			frames = 0;
 		}
 	}
+
+	delete t;
+	delete t2;
 
 	return 0;
 }

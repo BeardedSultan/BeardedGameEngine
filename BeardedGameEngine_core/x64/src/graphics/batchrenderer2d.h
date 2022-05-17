@@ -14,7 +14,8 @@ namespace beardedGameEngine { namespace graphics {
 
 	#define SHADER_VERTEX_INDEX 0
 	#define SHADER_UV_INDEX  1 //corresponds to shader "2" for texture
-	#define SHADER_COLOR_INDEX  2
+	#define SHADER_TID_INDEX  2 //corresponds to shader "2" for texture
+	#define SHADER_COLOR_INDEX 3
 
 	class BatchRenderer2D : public Renderer2D
 	{
@@ -24,6 +25,7 @@ namespace beardedGameEngine { namespace graphics {
 		VertexData* m_Buffer;
 		IndexBuffer* m_IBO;
 		GLsizei m_IndexCount;
+		std::vector<GLuint> m_TextureSlots;
 	public:
 		BatchRenderer2D();
 		~BatchRenderer2D();

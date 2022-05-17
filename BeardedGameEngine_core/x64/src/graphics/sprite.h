@@ -1,6 +1,7 @@
 #pragma once
 
 #include "renderable2d.h"
+//#include "texture.h"
 
 namespace beardedGameEngine { namespace graphics {
 
@@ -10,6 +11,7 @@ namespace beardedGameEngine { namespace graphics {
 
 	public:
 		Sprite(float x, float y, float width, float height, const maths::vec4& color);
+		Sprite(float x, float y, float width, float height, Texture* texture);
 	};
 
 } }
