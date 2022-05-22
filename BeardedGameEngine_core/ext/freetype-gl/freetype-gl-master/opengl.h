@@ -23,7 +23,7 @@
 #   endif
 #elif defined(_WIN32) || defined(_WIN64)
 #  include <GL/glew.h>
-#  include <GL/wglew.h>
+#  //include <GL/wglew.h>
 #elif defined(__ANDROID_API__)
 #  if defined(FREETYPE_GL_ES_VERSION_3_0)
 #    include <GLES3/gl3.h>

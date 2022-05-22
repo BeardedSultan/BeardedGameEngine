@@ -27,6 +27,7 @@
 #endif
 
 #ifdef __cplusplus
+#define NOT_USING_FT_GL_NAMESPACE
 #ifndef NOT_USING_FT_GL_NAMESPACE
 using namespace ftgl;
 #endif /* NOT_USING_FT_GL_NAMESPACE */

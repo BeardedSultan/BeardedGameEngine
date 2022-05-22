@@ -37,11 +37,16 @@ int main()
 
 	TileLayer layer(shader);
 	Texture* t = new Texture("alto.png");	
-	Texture* t2 = new Texture("bruh.png");
-	for (float y = -8.9f; y < 9.0f; y++) {
-		for (float x = -15.9f; x < 16.0f; x++) {
-			//layer.add(new Sprite(x, y, 0.9f, 0.9f, maths::vec4(rand() % 1000 / 1000.0f, 0, rand() % 1000 / 1000.0f, 1)));
-			layer.add(new Sprite(x, y, 0.9f, 0.9f, rand() % 2 == 0 ? t : t2));
+	for (float y = -8.9f; y < 9.0f; y+=3) {
+		for (float x = -15.9f; x < 16.0f; x+=3) {
+			if (rand() % 4 == 0)
+			{
+				layer.add(new Sprite(x, y, 2.0f, 2.0f, maths::vec4(rand() % 1000 / 1000.0f, 0, rand() % 1000 / 1000.0f, 1)));
+			}
+			else
+			{
+				layer.add(new Sprite(x, y, 2.0f, 2.0f, t));
+			}
 		}
 	}
 
@@ -77,7 +82,7 @@ int main()
 	}
 
 	delete t;
-	delete t2;
 
 	return 0;
+	
 }

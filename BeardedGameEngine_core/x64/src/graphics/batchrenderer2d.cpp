@@ -52,6 +52,12 @@ namespace beardedGameEngine { namespace graphics {
 
 		m_IBO = new IndexBuffer(indices, RENDERER_INDICES_SIZE);
 		glBindVertexArray(0);
+
+		m_FTAtlas = ftgl::texture_atlas_new(512, 512, 1);
+		m_FTFont = ftgl::texture_font_new_from_file(m_FTAtlas, 80, "arial.ttf");
+
+		std::string str = "A";
+		ftgl::texture_font_get_glyph(m_FTFont, str.c_str());
 	}
 
 	void BatchRenderer2D::begin()
@@ -122,6 +128,74 @@ namespace beardedGameEngine { namespace graphics {
 		m_Buffer->uv = uv[3];
 		m_Buffer->tid = ts;
 		m_Buffer->color = c;
+		m_Buffer++;
+
+		m_IndexCount += 6;
+	}
+
+	void BatchRenderer2D::drawString(const std::string& text, const maths::vec3& position, const maths::vec4& color)
+	{
+		using namespace ftgl;
+
+		float ts = 0.0f;
+
+		bool found = false;
+		for (int i = 0; i < m_TextureSlots.size(); i++) {
+			if (m_TextureSlots[i] == m_FTAtlas->id) {
+				ts = (float)(i + 1);
+				found = true;
+				break;
+			}
+		}
+
+		if (!found) {
+			if (m_TextureSlots.size() >= 32) {
+				end();
+				flush();
+				begin();
+			}
+			m_TextureSlots.push_back(m_FTAtlas->id);
+			ts = (float)(m_TextureSlots.size());
+		}
+
+		for (int i = 0; i < text.length(); i++)
+		{
+			std::string str;
+			str.push_back(text.at(i));
+			texture_glyph_t* glyph = texture_font_get_glyph(m_FTFont, str.c_str());
+			
+			if (glyph == NULL)
+			{
+				float x0 = position.x + glyph->offset_x;
+				float y0 = position.y + glyph->offset_y;
+				float x1 = x0 + glyph->width;
+				float y1 = y0 + glyph->height;
+
+				float u0 = glyph->s0;
+				float v0 = glyph->t0;
+				float u1 = glyph->s1;
+				float v1 = glyph->t1;
+			}
+		}
+
+		m_Buffer->vertex = maths::vec3(-8, -8, 0);
+		m_Buffer->uv = maths::vec2(0, 1);
+		m_Buffer->tid = ts;
+		m_Buffer++;
+
+		m_Buffer->vertex = maths::vec3(-8, 8, 0);
+		m_Buffer->uv = maths::vec2(0, 0);
+		m_Buffer->tid = ts;
+		m_Buffer++;
+
+		m_Buffer->vertex = maths::vec3(8, 8, 0);
+		m_Buffer->uv = maths::vec2(1, 0);
+		m_Buffer->tid = ts;
+		m_Buffer++;
+
+		m_Buffer->vertex = maths::vec3(8, -8, 0);
+		m_Buffer->uv = maths::vec2(1, 1);
+		m_Buffer->tid = ts;
 		m_Buffer++;
 
 		m_IndexCount += 6;
